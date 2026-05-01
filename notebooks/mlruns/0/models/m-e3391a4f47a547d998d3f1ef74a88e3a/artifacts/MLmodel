@@ -1,0 +1,37 @@
+artifact_path: /workspaces/MLOps-Fast-API/notebooks/mlruns/0/models/m-e3391a4f47a547d998d3f1ef74a88e3a/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.13
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+is_signature_from_type_hint: false
+mlflow_version: 3.11.1
+model_id: m-e3391a4f47a547d998d3f1ef74a88e3a
+model_size_bytes: 8044462
+model_uuid: m-e3391a4f47a547d998d3f1ef74a88e3a
+prompts: null
+run_id: d806c71e66464ccaab5ca3a142483a6b
+signature:
+  inputs: '[{"type": "double", "name": "customer_id", "required": true}, {"type":
+    "double", "name": "credit_score", "required": true}, {"type": "double", "name":
+    "country", "required": true}, {"type": "double", "name": "gender", "required":
+    true}, {"type": "double", "name": "age", "required": true}, {"type": "double",
+    "name": "tenure", "required": true}, {"type": "double", "name": "balance", "required":
+    true}, {"type": "double", "name": "products_number", "required": true}, {"type":
+    "double", "name": "credit_card", "required": true}, {"type": "double", "name":
+    "active_member", "required": true}, {"type": "double", "name": "estimated_salary",
+    "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-05-01 11:00:45.109637'
