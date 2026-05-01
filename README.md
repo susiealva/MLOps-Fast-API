@@ -33,4 +33,4 @@ Esto instalará todas las dependencias necesarias en un entorno limpio.
 	python src/load_data.py
 	```
 
-Esto descargará y descomprimirá el dataset de Telco Customer Churn en la carpeta `data/`.
+Esto descargará y descomprimirá el dataset de Bank Customer Churn (https://www.kaggle.com/datasets/gauravtopre/bank-customer-churn-dataset) en la carpeta `data/`.

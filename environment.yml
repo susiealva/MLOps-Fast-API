@@ -14,4 +14,3 @@ dependencies:
       - scikit-learn
       - fastapi
       - uvicorn
-      - os
