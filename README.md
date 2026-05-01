@@ -2,23 +2,23 @@
 # MLOps-Fast-API
 El objetivo de este challenge es poner en práctica lo aprendido de MLFlow y la puesta en producción de un modelo.
 
-## Creación de entorno conda
+## Creación de entorno
 
-Si prefieres usar conda para un entorno reproducible, ejecuta:
+Puedes usar conda para un entorno reproducible o pip con un entorno virtual. **No es necesario instalar las dependencias con pip si ya creaste el entorno conda usando `environment.yml`.**
 
+**Opción 1: Conda (recomendado)**
 ```bash
 conda env create -f environment.yml
 conda activate mlops-fastapi
 ```
-
 Esto instalará todas las dependencias necesarias en un entorno limpio.
 
-## Instalación y descarga automática del dataset
+**Opción 2: pip y entorno virtual**
+```bash
+pip install -r requirements.txt
+```
 
-1. Instala las dependencias:
-	```bash
-	pip install -r requirements.txt
-	```
+## Instalación y descarga automática del dataset
 
 2. Configura tu token de Kaggle:
 	 - Descarga tu archivo `kaggle.json` desde tu cuenta de Kaggle (https://www.kaggle.com/ -> Account -> Create New API Token).
