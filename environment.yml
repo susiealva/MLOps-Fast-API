@@ -1,0 +1,17 @@
+name: mlops-fastapi
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.13
+  - pip
+  - pip:
+      - kaggle
+      - mlflow
+      - dvc
+      - dvc-s3
+      - pandas
+      - scikit-learn
+      - fastapi
+      - uvicorn
+      - os

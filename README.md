@@ -2,6 +2,17 @@
 # MLOps-Fast-API
 El objetivo de este challenge es poner en práctica lo aprendido de MLFlow y la puesta en producción de un modelo.
 
+# Creación de entorno conda (opcional recomendado)
+
+Si prefieres usar conda para un entorno reproducible, ejecuta:
+
+```bash
+conda env create -f environment.yml
+conda activate mlops-fastapi
+```
+
+Esto instalará todas las dependencias necesarias en un entorno limpio.
+
 # Instalación y descarga automática del dataset
 
 1. Instala las dependencias:
