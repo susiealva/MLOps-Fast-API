@@ -15,13 +15,13 @@ ruta_completa = os.path.join(path, archivo)
 df = pd.read_csv(ruta_completa)
 
 print("¡Éxito! Dataset cargado.")
-display(df.head())
-display(df.info())
+print(df.head())
+print(df.info())
 
 # nos quedamos solo con España
-df = df.loc[['country']=='Spain']
+df = df.loc[df['country'] == 'Spain']
 
 # y elimino la columna del país, porque no la necesito para las predicciones
 df.drop(columns='country', inplace=True)
 
-display(df)
+print(df)
