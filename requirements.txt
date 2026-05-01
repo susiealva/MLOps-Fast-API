@@ -1,0 +1,8 @@
+kaggle
+mlflow
+dvc
+dvc-s3
+pandas
+scikit-learn
+fastapi
+uvicorn
