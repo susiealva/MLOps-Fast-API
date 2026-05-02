@@ -14,13 +14,13 @@ mlflow.set_experiment("Diabetes_Prediction")
 mlflow.sklearn.autolog()
 
 ##Cargar y preprocesar el dataset.
-class run_training():
+class df_training():
     def __init__(self,df):
         self.df = df
 
-    def run(self):
-        X = self.df.drop(columns="target")
-        y = self.df["target"]
+    def run(self, predictor='churn'):
+        X = self.df.drop(columns=predictor)
+        y = self.df[predictor]
     
         ##Dividir en train/test.
         X_train, X_test, y_train, y_test = train_test_split(
@@ -41,7 +41,8 @@ class run_training():
             mlflow.log_metric("mse", mse)
             mlflow.sklearn.log_model(model, "model")
 
-#if __name__ == "__main__":
-#    run_training()
+if __name__ == "__main__":
+    df = df_training()
+    df.run()
 
 ##Guardar el modelo entrenado.
