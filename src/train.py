@@ -27,19 +27,22 @@ def load_and_preprocess_data(path="data/Bank Customer Churn Prediction.csv"):
     df = pd.read_csv(path)  # Cargar datos desde CSV
     # Renombrar la columna objetivo para consistencia
     df = df.rename(columns={"churn": "target"})
-    
+
+    # Filtrar solo registros donde country sea 'spain' (en minúsculas)
+    df = df[df["country"].str.lower() == "spain"]
+
     # Codificar género: Male=1, Female=0
     df["gender"] = df["gender"].map({"Male": 1, "Female": 0})
-    
+
     # Eliminar columnas que no se usan en el modelo
     drop_cols = ["customer_id", "country"]
     df = df.drop(columns=drop_cols)
-    
+
     # Escalar variables numéricas (excepto las binarias/categóricas)
     num_cols = [c for c in df.columns if c not in ["gender", "credit_card", "active_member", "products_number", "target"]]
     scaler = StandardScaler()
     df[num_cols] = scaler.fit_transform(df[num_cols])
-    
+
     return df
 
 # 3. Función principal de entrenamiento y logging
