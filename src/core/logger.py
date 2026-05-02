@@ -12,6 +12,7 @@ logger.setLevel(logging.INFO)  # Nivel por defecto
 
 # Handler para imprimir en consola
 handler = logging.StreamHandler(sys.stdout)
+
 # Formato de los mensajes de log
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)

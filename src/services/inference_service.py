@@ -1,4 +1,4 @@
-def predict_churn(input_dict: dict) -> int:
+
 # --------------------------------------
 # Servicio de inferencia para predicción de churn
 # --------------------------------------
@@ -22,10 +22,12 @@ def predict_churn(input_dict: dict) -> int:
         "products_number", "credit_card", "active_member", "estimated_salary"
     ]
     input_df = pd.DataFrame([input_dict], columns=columns)
+    
     try:
         pred = model.predict(input_df)
         logger.info(f"Predicción realizada para input: {input_dict} → {pred[0]}")
         return int(pred[0])
+    
     except Exception as e:
         logger.error(f"Error en predicción: {e}")
         raise
