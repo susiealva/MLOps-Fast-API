@@ -1,0 +1,8 @@
+api_host: "0.0.0.0"
+api_port: 8000
+debug: true
+environment: "development"
+log_level: "INFO"
+model:
+  name: "mlflow_model"
+  version: "1.0.0"

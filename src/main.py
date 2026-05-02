@@ -1,9 +1,28 @@
+
 # API con FastAPI
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from core.logger import logger
+from core.config import settings
+from api import predict
 
-##Importar FastAPI, MLFlow y librerías necesarias.
+app = FastAPI(
+	title="Bank Churn Prediction API",
+	description="API for predicting customer churn using a trained ML model.",
+	version="0.1.0"
+)
 
-##Cargar el modelo entrenado desde MLFlow (o desde un archivo .pkl).
+app.add_middleware(
+	CORSMiddleware,
+	allow_origins=["*"],
+	allow_credentials=True,
+	allow_methods=["*"],
+	allow_headers=["*"],
+)
 
-##Definir la app FastAPI y el endpoint de predicción (POST).
+app.include_router(predict.router)
 
-##Recibir los datos de entrada, procesarlos y devolver la predicción.
+@app.get("/health")
+async def health_check():
+	logger.info("Health check requested")
+	return {"status": "ok"}
