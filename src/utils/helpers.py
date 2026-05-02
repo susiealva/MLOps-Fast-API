@@ -1,7 +1,16 @@
-import yaml
-from pathlib import Path
+# --------------------------------------
+# Utilidad para cargar archivos YAML
+# --------------------------------------
+# Función para cargar configuración desde un archivo YAML de forma segura.
+
+import yaml  # Para leer archivos YAML
+from pathlib import Path  # Manejo de rutas
 
 def load_yaml_config(path: str) -> dict:
+    """
+    Carga un archivo YAML y retorna su contenido como diccionario.
+    Si el archivo no existe o hay error, retorna un dict vacío.
+    """
     config_path = Path(path)
     if not config_path.exists():
         return {}

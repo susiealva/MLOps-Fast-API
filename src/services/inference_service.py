@@ -1,10 +1,20 @@
-import pandas as pd
-from core.logger import logger
-from models.mlflow_model import MLFlowModel
+def predict_churn(input_dict: dict) -> int:
+# --------------------------------------
+# Servicio de inferencia para predicción de churn
+# --------------------------------------
+# Contiene la lógica para preprocesar la entrada y llamar al modelo MLflow.
 
+import pandas as pd  # Manipulación de datos
+from core.logger import logger  # Logger centralizado
+from models.mlflow_model import MLFlowModel  # Abstracción del modelo MLflow
+
+# Instanciar el modelo MLflow una sola vez
 model = MLFlowModel()
 
 def predict_churn(input_dict: dict) -> int:
+    """
+    Preprocesa los datos de entrada, realiza la predicción y retorna el resultado.
+    """
     # Preprocesamiento mínimo (ajustar según tu pipeline real)
     input_dict["gender"] = 1 if input_dict["gender"].lower() == "male" else 0
     columns = [
