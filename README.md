@@ -18,9 +18,34 @@ Esto instalará todas las dependencias necesarias en un entorno limpio.
 pip install -r requirements.txt
 ```
 
+## Reproducción rápida (paso a paso)
+
+Ejecuta estos pasos desde la raíz del proyecto para reproducir el flujo completo:
+
+```bash
+conda env create -f environment.yml
+conda activate mlops-fastapi
+python src/load_data.py
+python src/train.py
+mlflow ui
+```
+
+En otra terminal (con el mismo entorno activado), levanta la API:
+
+```bash
+uvicorn src.main:app --reload
+```
+
+Verificaciones rápidas:
+
+```bash
+ls -lh data/
+pytest
+```
+
 ## Instalación y descarga automática del dataset
 
-2. Configura tu token de Kaggle:
+1. Configura tu token de Kaggle:
 	 - Descarga tu archivo `kaggle.json` desde tu cuenta de Kaggle (https://www.kaggle.com/ -> Account -> Create New API Token).
 	 - Opción recomendada: copia el archivo a la ruta `~/.kaggle/kaggle.json` ejecutando:
 		 ```bash
@@ -34,12 +59,13 @@ pip install -r requirements.txt
 		 export KAGGLE_KEY=TU_API_KEY
 		 ```
 
-3. Descarga el dataset automáticamente:
+2. Descarga el dataset automáticamente:
 	```bash
 	python src/load_data.py
 	```
 
 Esto descargará y descomprimirá el dataset de Bank Customer Churn (https://www.kaggle.com/datasets/gauravtopre/bank-customer-churn-dataset) en la carpeta `data/`.
+Si el archivo `data/Bank Customer Churn Prediction.csv` ya existe, puedes continuar directamente con el entrenamiento.
 
 
 ## Estructura del proyecto (mejores prácticas MLOps)
@@ -58,8 +84,20 @@ tests/          # Pruebas automáticas (pytest)
 
 ## Configuración y variables de entorno
 
-1. Copia `.env.example` a `.env` y ajusta rutas si es necesario.
-2. Puedes modificar parámetros en `src/config/config.yaml` para cambiar el comportamiento global.
+1. Crea un archivo `.env` en la raíz del proyecto (no existe `.env.example` en este repositorio).
+2. Define al menos estas variables:
+
+```env
+API_HOST=0.0.0.0
+API_PORT=8000
+DEBUG=true
+ENVIRONMENT=development
+LOG_LEVEL=INFO
+MLFLOW_MODEL_PATH=mlruns/0/models/<model-id>/artifacts
+```
+
+`MLFLOW_MODEL_PATH` debe apuntar al modelo que quieres servir en la API.
+3. Puedes modificar parámetros en `src/config/config.yaml` para cambiar el comportamiento global.
 
 
 ## Entrenamiento y despliegue del modelo
@@ -71,7 +109,15 @@ Ejecuta el script de entrenamiento para preprocesar, entrenar y guardar el model
 ```bash
 python src/train.py
 ```
-Esto generará un modelo MLflow en la carpeta de experimentos (`mlruns/`).
+Esto generará nuevos runs/modelos en `mlruns/` y metadata en `mlflow.db`.
+
+Para visualizar experimentos y métricas:
+
+```bash
+mlflow ui
+```
+
+Por defecto, la UI queda disponible en `http://127.0.0.1:5000`.
 
 ### 2. Servir la API de predicción
 
