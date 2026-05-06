@@ -3,7 +3,7 @@
 # --------------------------------------
 # Define la clase Settings para cargar variables de entorno y configuración.
 
-from pydantic import BaseSettings  # Para gestión de settings y validación
+from pydantic_settings import BaseSettings, SettingsConfigDict  # Para gestión de settings y validación
 import os  # Acceso a variables de entorno
 
 # Clase de configuración principal
@@ -18,9 +18,11 @@ class Settings(BaseSettings):
         "../notebooks/mlruns/0/models/m-11c0f253c3724676a211147a6b69a300/artifacts"
     )  # Ruta por defecto al modelo MLflow
 
-    class Config:
-        env_file = ".env"  # Archivo de variables de entorno
-        env_file_encoding = "utf-8"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
 
 # Instancia global de settings
 settings = Settings()

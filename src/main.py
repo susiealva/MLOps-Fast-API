@@ -7,9 +7,9 @@
 
 from fastapi import FastAPI  # Framework principal para la API
 from fastapi.middleware.cors import CORSMiddleware  # Middleware para CORS
-from core.logger import logger  # Logger centralizado
-from core.config import settings  # Configuración de la app
-from api import predict  # Rutas de predicción
+from src.core.logger import logger  # Logger centralizado
+from src.core.config import settings  # Configuración de la app
+from src.api import predict  # Rutas de predicción
 
 # Instancia principal de la aplicación FastAPI
 app = FastAPI(

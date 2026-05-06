@@ -5,7 +5,7 @@
 
 from fastapi import APIRouter, status  # Para definir rutas y estados HTTP
 from pydantic import BaseModel, Field  # Validación de datos de entrada
-from services.inference_service import predict_churn  # Lógica de predicción
+from src.services.inference_service import predict_churn  # Lógica de predicción
 
 # Instancia del router para agrupar endpoints
 router = APIRouter()
@@ -13,7 +13,7 @@ router = APIRouter()
 # Esquema de entrada para la predicción
 class CustomerData(BaseModel):
     credit_score: int = Field(..., ge=0, le=1000)
-    gender: str = Field(..., regex="^(Male|Female)$", description="Male or Female")
+    gender: str = Field(..., pattern="^(Male|Female)$", description="Male or Female")
     age: int = Field(..., ge=18, le=120)
     tenure: int = Field(..., ge=0, le=50)
     balance: float = Field(..., ge=0)
@@ -28,5 +28,5 @@ def predict(data: CustomerData):
     """
     Recibe los datos del cliente, llama al servicio de predicción y retorna el resultado.
     """
-    pred = predict_churn(data.dict())
+    pred = predict_churn(data.model_dump())
     return {"churn_prediction": pred}
