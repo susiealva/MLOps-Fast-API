@@ -39,7 +39,11 @@ def load_and_preprocess_data(path="data/Bank Customer Churn Prediction.csv"):
     df = df.drop(columns=drop_cols)
 
     # Escalar variables numéricas (excepto las binarias/categóricas)
-    num_cols = [c for c in df.columns if c not in ["gender", "credit_card", "active_member", "products_number", "target"]]
+    num_cols = [c for c in df.columns if c not in ["gender",
+                                                   "credit_card",
+                                                   "active_member",
+                                                   "products_number",
+                                                   "target"]]
     scaler = StandardScaler()
     df[num_cols] = scaler.fit_transform(df[num_cols])
 
