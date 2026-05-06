@@ -66,7 +66,7 @@ def train_and_log():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     # Entrenamiento y logging con MLflow
-    with mlflow.start_run(run_name="Logistic_Regression_Baseline"):
+    with mlflow.start_run(run_name="RandomForest_Classifier"):
         model = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=42)
     
         # 2. Entrenar el modelo
