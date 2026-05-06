@@ -164,6 +164,48 @@ pytest
 
 Incluye pruebas para `/health` y `/predict` (válido/inválido).
 
+## Troubleshooting rápido
+
+### 1. Error de autenticación con Kaggle
+
+Si `python src/load_data.py` falla por credenciales:
+
+```bash
+mkdir -p ~/.kaggle
+cp /ruta/al/archivo/kaggle.json ~/.kaggle/kaggle.json
+chmod 600 ~/.kaggle/kaggle.json
+```
+
+También puedes usar variables de entorno:
+
+```bash
+export KAGGLE_USERNAME=TU_USUARIO
+export KAGGLE_KEY=TU_API_KEY
+```
+
+### 2. Puerto 5000 ocupado al ejecutar MLflow UI
+
+Si `mlflow ui` no inicia porque el puerto está en uso:
+
+```bash
+mlflow ui --port 5001
+```
+
+### 3. Error: modelo MLflow no encontrado en la API
+
+Si la API falla al cargar el modelo, revisa `MLFLOW_MODEL_PATH` en `.env`.
+Debe apuntar a una ruta existente, por ejemplo:
+
+```env
+MLFLOW_MODEL_PATH=mlruns/0/models/<model-id>/artifacts
+```
+
+Puedes listar modelos disponibles con:
+
+```bash
+find mlruns -type f -name MLmodel
+```
+
 ## Notas de mejores prácticas
 
 - Separación de lógica: API, servicios, modelos y utilidades.
