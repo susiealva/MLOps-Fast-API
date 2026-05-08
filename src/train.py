@@ -86,7 +86,7 @@ def train_and_log():
         # 4. Logging manual en MLflow
         mlflow.log_param("model_type", "RandomForest")
         mlflow.log_param("n_estimators", 100)
-        mlflow.log_param("max_depth", 5)
+        mlflow.log_param("max_depth", 6)
         
         mlflow.log_metric("mse", mse)
         mlflow.log_metric("accuracy", acc)
