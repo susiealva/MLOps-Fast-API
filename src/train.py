@@ -79,7 +79,7 @@ def train_and_log():
         
         mlp = MLPClassifier(
             hidden_layer_sizes=(100, 50), 
-            max_iter=500, 
+            max_iter=800, 
             activation='relu', 
             solver='adam', 
             random_state=42
