@@ -11,7 +11,8 @@ import mlflow.sklearn  # MLflow para modelos sklearn
 import pandas as pd  # Manipulación de datos
 from sklearn.model_selection import train_test_split  # División de datos
 from sklearn.linear_model import LogisticRegression  # Modelo de regresión logística
-from sklearn.metrics import mean_squared_error  # Métrica de evaluación
+from sklearn.ensemble import RandomForestClassifier  # Modelo de bosque aleatorio
+from sklearn.metrics import mean_squared_error, accuracy_score  # Métricas de evaluación
 from sklearn.preprocessing import StandardScaler  # Escalado de variables numéricas
 
 # 1. Configurar el experimento de MLflow
@@ -65,19 +66,30 @@ def train_and_log():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     # Entrenamiento y logging con MLflow
-    with mlflow.start_run(run_name="Logistic_Regression_Baseline"):
-        model = LogisticRegression(max_iter=200)  # Instanciar modelo
-        model.fit(X_train, y_train)  # Entrenar modelo
+    with mlflow.start_run(run_name="RandomForest_Classifier"):
+        model = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=42)
+    
+        # 2. Entrenar el modelo
+        model.fit(X_train, y_train)
         
-        # Predicción y métrica
+        # 3. Predicción y métrica
         predictions = model.predict(X_test)
         mse = mean_squared_error(y_test, predictions)
-        print(f"Entrenamiento completado. MSE: {mse}")
+        # Nota: Si es clasificación, podrías querer registrar también el 'accuracy'
+        acc = accuracy_score(y_test, predictions)
         
-        # Logging manual adicional (además del autolog)
-        mlflow.log_param("model_type", "LogisticRegression")
+        print(f"Entrenamiento completado. MSE: {mse} | Accuracy: {acc}")
+        
+        # 4. Logging manual en MLflow
+        mlflow.log_param("model_type", "RandomForest")
+        mlflow.log_param("n_estimators", 100)
+        mlflow.log_param("max_depth", 5)
+        
         mlflow.log_metric("mse", mse)
-        mlflow.sklearn.log_model(model, "model")  # Guardar modelo en MLflow
+        mlflow.log_metric("accuracy", acc)
+        
+        # Guardar el modelo en el registro de MLflow
+        mlflow.sklearn.log_model(model, "random_forest_model")
 
 # 4. Entry point del script
 if __name__ == "__main__":

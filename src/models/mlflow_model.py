@@ -4,8 +4,8 @@
 # Clase para encapsular la carga y predicción con modelos MLflow.
 
 import mlflow.pyfunc  # MLflow para modelos genéricos
-from core.logger import logger  # Logger centralizado
-from core.config import settings  # Configuración global
+from src.core.logger import logger  # Logger centralizado
+from src.core.config import settings  # Configuración global
 
 class MLFlowModel:
     """

@@ -5,8 +5,8 @@
 # Contiene la lógica para preprocesar la entrada y llamar al modelo MLflow.
 
 import pandas as pd  # Manipulación de datos
-from core.logger import logger  # Logger centralizado
-from models.mlflow_model import MLFlowModel  # Abstracción del modelo MLflow
+from src.core.logger import logger  # Logger centralizado
+from src.models.mlflow_model import MLFlowModel  # Abstracción del modelo MLflow
 
 # Instanciar el modelo MLflow una sola vez
 model = MLFlowModel()
