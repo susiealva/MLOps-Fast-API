@@ -78,8 +78,8 @@ def train_and_log():
     with mlflow.start_run(run_name="MLP_Model"):
         
         mlp = MLPClassifier(
-            hidden_layer_sizes=(100, 50), 
-            max_iter=800, 
+            hidden_layer_sizes=(16, 8), 
+            max_iter=500, 
             activation='relu', 
             solver='adam', 
             random_state=42
