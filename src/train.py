@@ -70,7 +70,7 @@ def train_and_log():
     
     # Entrenamiento y logging con MLflow
     with mlflow.start_run(run_name="RandomForest_Classifier"):
-        model = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=42)
+        model = RandomForestClassifier(n_estimators=100, max_depth=6, random_state=42)
     
         # 2. Entrenar el modelo
         model.fit(X_train, y_train)
