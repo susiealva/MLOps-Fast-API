@@ -69,9 +69,9 @@ def train_and_log():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     # Entrenamiento y logging con MLflow
-    with mlflow.start_run(run_name="LogisticRegression"):
-        model = LogisticRegression(random_state=42)  # Modelo de regresión logística
-        #model = RandomForestClassifier(n_estimators=100, max_depth=6, random_state=42)
+    with mlflow.start_run(run_name="RandomForest_Classifier"):
+        #model = LogisticRegression(random_state=42)  # Modelo de regresión logística
+        model = RandomForestClassifier(n_estimators=100, max_depth=6, random_state=42)
     
         # 2. Entrenar el modelo
         model.fit(X_train, y_train)
@@ -88,14 +88,15 @@ def train_and_log():
         #mlflow.log_param("model_type", "RandomForest")
         #mlflow.log_param("n_estimators", 100)
         #mlflow.log_param("max_depth", 6)
-        mlflow.log_param("model_type", "LogisticRegression")
-        mlflow.log_param("random_state", 42)
+        mlflow.log_param("model_type", "RandomForest")
+        mlflow.log_param("n_estimators", 200)
+        mlflow.log_param("max_depth", 6)
         
         mlflow.log_metric("mse", mse)
         mlflow.log_metric("accuracy", acc)
         
         # Guardar el modelo en el registro de MLflow
-        mlflow.sklearn.log_model(model, "log_regression_model")
+        mlflow.sklearn.log_model(model, "random_forest_model")
 
 # 4. Entry point del script
 if __name__ == "__main__":
