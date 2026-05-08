@@ -15,6 +15,9 @@ from sklearn.ensemble import RandomForestClassifier  # Modelo de bosque aleatori
 from sklearn.metrics import mean_squared_error, accuracy_score  # Métrica de evaluación
 from sklearn.preprocessing import StandardScaler  # Escalado de variables numéricas
 
+#db_path = "sqlite:///mlflow.db"
+#mlflow.set_tracking_uri(db_path)
+
 # 1. Configurar el experimento de MLflow
 mlflow.set_experiment("Bank_Customer_Churn")  # Nombre del experimento en MLflow
 mlflow.sklearn.autolog()  # Habilita autologging para sklearn
@@ -78,7 +81,7 @@ def train_and_log():
         # Nota: Si es clasificación, podrías querer registrar también el 'accuracy'
         acc = accuracy_score(y_test, predictions)
         
-        print(f"Entrenamiento completado. MSE: {mse} | Accuracy: {acc}")
+        #print(f"Entrenamiento completado. MSE: {mse} | Accuracy: {acc}")
         
         # 4. Logging manual en MLflow
         mlflow.log_param("model_type", "RandomForest")
