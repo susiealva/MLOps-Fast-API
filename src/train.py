@@ -7,16 +7,22 @@
 
 import os  # Para operaciones de sistema si se requieren
 import mlflow  # MLflow para tracking de experimentos
-import mlflow.sklearn  # MLflow para modelos sklearn
-import mlflow.xgboost
-from xgboost import XGBClassifier
 import pandas as pd  # Manipulación de datos
+
+# preparación de datos
 from sklearn.model_selection import train_test_split  # División de datos
-from sklearn.linear_model import LogisticRegression  # Modelo de regresión logística
-from sklearn.ensemble import RandomForestClassifier  # Modelo de bosque aleatorio
-from sklearn.metrics import mean_squared_error, accuracy_score  # Métricas de evaluación
 from sklearn.preprocessing import StandardScaler  # Escalado de variables numéricas
 
+# modelos
+import mlflow.sklearn  # MLflow para modelos sklearn
+from sklearn.linear_model import LogisticRegression  # Modelo de regresión logística
+from sklearn.ensemble import RandomForestClassifier  # Modelo de bosque aleatorio
+import mlflow.xgboost  # MLflow para modelos de ensamblaje xgboost
+from xgboost import XGBClassifier
+from sklearn.neural_network import MLPClassifier  # Modelo de red neuronal
+
+# evaluación
+from sklearn.metrics import mean_squared_error, accuracy_score  # Métricas de evaluación
 
 # 1. Configurar el experimento de MLflow
 mlflow.set_experiment("Bank_Customer_Churn")  # Nombre del experimento en MLflow
@@ -70,33 +76,30 @@ def train_and_log():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     # Entrenamiento y logging con MLflow
-    with mlflow.start_run(run_name="XGBoost_Model"):
-        #model = LogisticRegression(random_state=42)  # Modelo de regresión logística
-        #model = RandomForestClassifier(n_estimators=200, max_depth=6, random_state=42)
-        model = XGBClassifier(n_estimators=100, max_depth=5, learning_rate=0.1, random_state=42)
-    
-        # 2. Entrenar el modelo
-        model.fit(X_train, y_train)
+    with mlflow.start_run(run_name="MLP_Model"):
         
+        mlp = MLPClassifier(
+            hidden_layer_sizes=(100, 50), 
+            max_iter=500, 
+            activation='relu', 
+            solver='adam', 
+            random_state=42
+        )
+
+        # 2. Entrenar el modelo
+        mlp.fit(X_train, y_train)
+
         # 3. Predicción y métrica
-        predictions = model.predict(X_test)
-        #mse = mean_squared_error(y_test, predictions)
-        # Nota: Si es clasificación, podrías querer registrar también el 'accuracy'
+        predictions = mlp.predict(X_test)
         acc = accuracy_score(y_test, predictions)
         
-        #print(f"Entrenamiento completado. MSE: {mse} | Accuracy: {acc}")
-        
-        # 4. Logging manual en MLflow
-        #mlflow.log_param("model_type", "RandomForest")
-        #mlflow.log_param("n_estimators", 100)
-        #mlflow.log_param("max_depth", 6)
-        mlflow.log_param("n_estimators", 100)
-        mlflow.log_param("max_depth", 5)
+        # Registro en MLflow
+        mlflow.log_param("layers", "100, 50")
+        mlflow.log_param("activation", "relu")
         mlflow.log_metric("accuracy", acc)
-        
+                
         # Guardar el modelo en el registro de MLflow
-        #mlflow.sklearn.log_model(model, "rf_model_d6_e200")
-        mlflow.xgboost.log_model(model, "xgBoost_model_d5_e100")
+        mlflow.sklearn.log_model(mlp, "mlp_model")
 
 # 4. Entry point del script
 if __name__ == "__main__":
