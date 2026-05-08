@@ -7,6 +7,8 @@
 
 import os  # Para operaciones de sistema si se requieren
 import mlflow  # MLflow para tracking de experimentos
+import mlflow.sklearn  # MLflow para modelos sklearn
+import mlflow.xgboost
 import pandas as pd  # Manipulación de datos
 
 # preparación de datos
@@ -14,19 +16,17 @@ from sklearn.model_selection import train_test_split  # División de datos
 from sklearn.preprocessing import StandardScaler  # Escalado de variables numéricas
 
 # modelos
-import mlflow.sklearn  # MLflow para modelos sklearn
 from sklearn.linear_model import LogisticRegression  # Modelo de regresión logística
 from sklearn.ensemble import RandomForestClassifier  # Modelo de bosque aleatorio
-import mlflow.xgboost  # MLflow para modelos de ensamblaje xgboost
 from xgboost import XGBClassifier
-from sklearn.neural_network import MLPClassifier  # Modelo de red neuronal
 
-# evaluación
+# métricas de rendimiento
 from sklearn.metrics import mean_squared_error, accuracy_score  # Métricas de evaluación
 
 # 1. Configurar el experimento de MLflow
 mlflow.set_experiment("Bank_Customer_Churn")  # Nombre del experimento en MLflow
-mlflow.sklearn.autolog()  # Habilita autologging de datasets
+#mlflow.sklearn.autolog()  # Habilita autologging para sklearn
+mlflow.xgboost.autolog()  # Habilita autologging para XGBoost
 
 # 2. Función para cargar y preprocesar el dataset
 def load_and_preprocess_data(path="data/Bank Customer Churn Prediction.csv"):
@@ -75,30 +75,26 @@ def train_and_log():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     # Entrenamiento y logging con MLflow
-    with mlflow.start_run(run_name="MLP_Model"):
-        
-        mlp = MLPClassifier(
-            hidden_layer_sizes=(16, 8), 
-            max_iter=500, 
-            activation='relu', 
-            solver='adam', 
-            random_state=42
-        )
-
+    with mlflow.start_run(run_name="XGBoost_Model"):
+        # 1. Definir el modelo (XGBoost)
+        model = XGBClassifier(n_estimators=100, max_depth=5, learning_rate=0.1, random_state=42)
+    
         # 2. Entrenar el modelo
-        mlp.fit(X_train, y_train)
-
+        model.fit(X_train, y_train)
+        
         # 3. Predicción y métrica
-        predictions = mlp.predict(X_test)
+        predictions = model.predict(X_test)
         acc = accuracy_score(y_test, predictions)
         
-        # Registro en MLflow
-        mlflow.log_param("layers", "100, 50")
-        mlflow.log_param("activation", "relu")
+        #print(f"Entrenamiento completado. MSE: {mse} | Accuracy: {acc}")
+        
+        # 4. Logging manual en MLflow
+        mlflow.log_param("n_estimators", 100)
+        mlflow.log_param("max_depth", 5)
         mlflow.log_metric("accuracy", acc)
-                
+        
         # Guardar el modelo en el registro de MLflow
-        mlflow.sklearn.log_model(mlp, "mlp_model")
+        mlflow.xgboost.log_model(model, "xgBoost_model_d5_e100")
 
 # 4. Entry point del script
 if __name__ == "__main__":
