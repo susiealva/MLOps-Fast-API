@@ -28,5 +28,5 @@ def predict(data: CustomerData):
     """
     Recibe los datos del cliente, llama al servicio de predicción y retorna el resultado.
     """
-    pred = predict_churn(data.dict())
+    pred = predict_churn(data.model_dump())
     return {"churn_prediction": pred}

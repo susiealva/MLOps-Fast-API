@@ -1,127 +1,98 @@
 
 # MLOps-Fast-API
-El objetivo de este challenge es poner en práctica lo aprendido de MLFlow y la puesta en producción de un modelo.
 
-## Creación de entorno
+Proyecto de predicción de churn con MLflow + FastAPI.
 
-Puedes usar conda para un entorno reproducible o pip con un entorno virtual. **No es necesario instalar las dependencias con pip si ya creaste el entorno conda usando `environment.yml`.**
+## Inicio Rápido
 
-**Opción 1: Conda (recomendado)**
+1. Instala dependencias (elige una opción):
+
 ```bash
+# Opción A: conda
 conda env create -f environment.yml
 conda activate mlops-fastapi
-```
-Esto instalará todas las dependencias necesarias en un entorno limpio.
 
-**Opción 2: pip y entorno virtual**
-```bash
+# Opción B: pip
 pip install -r requirements.txt
 ```
 
-## Instalación y descarga automática del dataset
-
-2. Configura tu token de Kaggle:
-	 - Descarga tu archivo `kaggle.json` desde tu cuenta de Kaggle (https://www.kaggle.com/ -> Account -> Create New API Token).
-	 - Opción recomendada: copia el archivo a la ruta `~/.kaggle/kaggle.json` ejecutando:
-		 ```bash
-		 mkdir -p ~/.kaggle
-		 cp /ruta/al/archivo/kaggle.json ~/.kaggle/kaggle.json
-		 chmod 600 ~/.kaggle/kaggle.json
-		 ```
-	 - Alternativamente, puedes exportar las variables de entorno (extrae los valores de tu kaggle.json):
-		 ```bash
-		 export KAGGLE_USERNAME=TU_USUARIO
-		 export KAGGLE_KEY=TU_API_KEY
-		 ```
-
-3. Descarga el dataset automáticamente:
-	```bash
-	python src/load_data.py
-	```
-
-Esto descargará y descomprimirá el dataset de Bank Customer Churn (https://www.kaggle.com/datasets/gauravtopre/bank-customer-churn-dataset) en la carpeta `data/`.
-
-
-## Estructura del proyecto (mejores prácticas MLOps)
-
-```
-src/
-	core/         # Logging, configuración centralizada
-	models/       # Lógica de modelos ML (MLflow, etc)
-	services/     # Lógica de negocio (predicción, validaciones)
-	api/          # Rutas FastAPI
-	utils/        # Helpers y utilidades
-	config/       # Archivos de configuración YAML/env
-main.py         # Entrypoint FastAPI
-tests/          # Pruebas automáticas (pytest)
-```
-
-## Configuración y variables de entorno
-
-1. Copia `.env.example` a `.env` y ajusta rutas si es necesario.
-2. Puedes modificar parámetros en `src/config/config.yaml` para cambiar el comportamiento global.
-
-
-## Entrenamiento y despliegue del modelo
-
-### 1. Entrenamiento y logging con MLflow
-
-Ejecuta el script de entrenamiento para preprocesar, entrenar y guardar el modelo con MLflow:
+2. Crea tu configuración local:
 
 ```bash
+cp .env.example .env
+```
+
+3. Configura credenciales de Kaggle (si no tienes el CSV en `data/`):
+
+```bash
+mkdir -p ~/.kaggle
+cp /ruta/a/kaggle.json ~/.kaggle/kaggle.json
+chmod 600 ~/.kaggle/kaggle.json
+```
+
+4. Descarga datos y entrena:
+
+```bash
+python src/load_data.py
 python src/train.py
 ```
-Esto generará un modelo MLflow en la carpeta de experimentos (`mlruns/`).
 
-### 2. Servir la API de predicción
+5. Usa el modelo más reciente en `.env`:
 
-Lanza el servidor de desarrollo:
+```bash
+ls -td mlruns/*/models/*/artifacts | head -n 1
+```
+
+Copia esa ruta en `MLFLOW_MODEL_PATH` dentro de `.env`.
+
+## Ejecutar
+
+Terminal 1 (MLflow UI):
+
+```bash
+mlflow ui
+```
+
+Terminal 2 (API):
 
 ```bash
 uvicorn src.main:app --reload
 ```
-La API estará disponible en http://localhost:8000
 
-#### Endpoints principales
+## Probar rápido
 
-- `GET /health` — Health check para monitoreo
-- `POST /predict` — Predicción de churn. Ejemplo de payload:
+Health check:
 
-```json
-{
-	"credit_score": 650,
-	"gender": "Male",
-	"age": 35,
-	"tenure": 5,
-	"balance": 50000.0,
-	"products_number": 2,
-	"credit_card": 1,
-	"active_member": 1,
-	"estimated_salary": 60000.0
-}
+```bash
+curl http://127.0.0.1:8000/health
 ```
 
-Respuesta:
-```json
-{"churn_prediction": 0}
+Predicción:
+
+```bash
+curl -X POST http://127.0.0.1:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "credit_score": 650,
+    "gender": "Male",
+    "age": 35,
+    "tenure": 5,
+    "balance": 50000.0,
+    "products_number": 2,
+    "credit_card": 1,
+    "active_member": 1,
+    "estimated_salary": 60000.0
+  }'
 ```
 
-La documentación interactiva está disponible en `/docs`.
-
-## Pruebas automáticas
-
-Ejecuta todos los tests con:
+Tests:
 
 ```bash
 pytest
 ```
 
-Incluye pruebas para `/health` y `/predict` (válido/inválido).
+## Problemas Comunes
 
-## Notas de mejores prácticas
-
-- Separación de lógica: API, servicios, modelos y utilidades.
-- Logging estructurado y centralizado.
-- Configuración desacoplada y versionada.
-- Validación estricta de datos de entrada.
-- Fácil extensión para nuevos modelos, servicios o endpoints.
+- Error de Kaggle: revisa `~/.kaggle/kaggle.json` y permisos (`chmod 600`).
+- Puerto ocupado para MLflow: `mlflow ui --port 5001`.
+- Modelo no encontrado: valida `MLFLOW_MODEL_PATH` y que exista `MLmodel` en esa ruta.
