@@ -17,12 +17,11 @@ from sklearn.ensemble import RandomForestClassifier  # Modelo de bosque aleatori
 from sklearn.metrics import mean_squared_error, accuracy_score  # Métricas de evaluación
 from sklearn.preprocessing import StandardScaler  # Escalado de variables numéricas
 
-#db_path = "sqlite:///mlflow.db"
-#mlflow.set_tracking_uri(db_path)
 
 # 1. Configurar el experimento de MLflow
 mlflow.set_experiment("Bank_Customer_Churn")  # Nombre del experimento en MLflow
-mlflow.sklearn.autolog()  # Habilita autologging para sklearn
+#mlflow.sklearn.autolog()  # Habilita autologging para sklearn
+mlflow.xgboost.autolog()  # Habilita autologging para XGBoost
 
 # 2. Función para cargar y preprocesar el dataset
 def load_and_preprocess_data(path="data/Bank Customer Churn Prediction.csv"):
